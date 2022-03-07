@@ -9,7 +9,7 @@ interface Props {
 }
 
 export const CommentCard: React.FC<Props> = (props: Props) => {
-    const { comment, idx , getPost} = props;
+    const { comment, idx, getPost } = props;
 
     return (
         <>

@@ -1,10 +1,11 @@
 import React from 'react';
-import { Spinner } from 'reactstrap';
+import { Button, Spinner } from 'reactstrap';
 import { CommentCard } from './components/comment_card';
 import { GenericModal } from './components/modal';
+import { PostForm } from './components/post_form';
 import { getComments, getPost } from './data/data.service';
 import './index.css';
-import { Comment } from './models/comment.model';
+import { Comment, NewComment } from './models/comment.model';
 import { Post } from './models/post.model';
 
 
@@ -58,6 +59,7 @@ const App = () => {
     try {
       if (postsCache[comment.postId] != null) {
         setCurrentPost(postsCache[comment.postId]);
+
       } else {
         const data = await getPost(comment.postId);
         if (data) {
@@ -72,6 +74,16 @@ const App = () => {
     }
   }
 
+  const handlePostComment = async (newComment: NewComment) => {
+    try {
+      console.log({ newComment })
+      setIsModalOpen(false);
+    } catch (error) {
+      console.log({ error })
+    }
+
+  }
+
   return (
     <>
       {isLoading ? <div id='spinner'>
@@ -80,13 +92,19 @@ const App = () => {
         </div>
       </div> :
         <div className='container'  >
-          <h1 className='mb-5 mt-5'>Comments: ({comments?.length})</h1>
+          <div className='d-flex'>
+            <h1 className='mb-5 mt-5'>Comments: ({comments?.length}) </h1>
+          </div>
 
-          <div id='comments' onScroll={handleScroll} style={{ height: '75VH' }}>
+          <Button color='primary' onClick={() => setIsModalOpen(true)}>
+            Add new comment
+          </Button>
+
+          <div id='comments' onScroll={handleScroll}>
 
             {comments?.map((comment: Comment, idx: number) =>
-              <div className='mt-4'>
-                <CommentCard getPost={() => fetchPostData(comment)} comment={comment} idx={idx} key={comment.id} />
+              <div className='mt-4' key={comment.id}>
+                <CommentCard getPost={() => fetchPostData(comment)} comment={comment} idx={idx} />
               </div>
             )}
 
@@ -109,8 +127,13 @@ const App = () => {
           closeModal={() => {
             setIsModalOpen(false);
             setCurrentPost(null);
-          }} /> : null}
-
+          }} /> : isModalOpen && currentPost == null ? <GenericModal modalTitle={'Add Comment'}
+            modalBody={<PostForm handleFormSubmit={handlePostComment}></PostForm>}
+            isModalOpen={isModalOpen}
+            closeModal={() => {
+              setIsModalOpen(false);
+              setCurrentPost(null);
+            }} /> : null}
     </>
   );
 }

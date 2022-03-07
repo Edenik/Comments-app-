@@ -5,7 +5,7 @@ interface Props {
     readonly isModalOpen: boolean;
     readonly closeModal: Function;
     readonly modalTitle : string;
-    readonly modalBody : JSX.Element;
+    readonly modalBody : JSX.Element | React.FC<any>;
     readonly modalFooter ? : JSX.Element;
 }
 
