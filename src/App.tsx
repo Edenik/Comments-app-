@@ -1,22 +1,23 @@
 import React from 'react';
 import { Spinner } from 'reactstrap';
-
-import './index.css';
 import { CommentCard } from './components/comment_card';
+import { GenericModal } from './components/modal';
 import { getComments, getPost } from './data/data.service';
+import './index.css';
 import { Comment } from './models/comment.model';
 import { Post } from './models/post.model';
-import { GenericModal } from './components/modal';
+
 
 const App = () => {
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
   const [isLoadingMore, setIsLoadingMore] = React.useState<boolean>(false);
-  const [skipAmount, setSkipAmount] = React.useState<number>(0);
-  const [comments, setComments] = React.useState<Comment[] | null>(null);
   const [isModalOpen, setIsModalOpen] = React.useState<boolean>(false);
 
+  const [comments, setComments] = React.useState<Comment[] | null>(null);
   const [currentPost, setCurrentPost] = React.useState<Post | null>(null);
   const [postsCache, setPostsCache] = React.useState<any>({});
+
+  const [skipAmount, setSkipAmount] = React.useState<number>(0);
   const limit = 20;
 
   React.useEffect(() => {
@@ -35,7 +36,6 @@ const App = () => {
       console.log({ error })
     }
   }
-
 
   const fetchData = async () => {
     try {
@@ -65,7 +65,7 @@ const App = () => {
           setPostsCache({ ...postsCache, [comment.postId]: data })
         }
       }
-      
+
       setIsModalOpen(true);
     } catch (error) {
       console.log({ error })
@@ -98,8 +98,13 @@ const App = () => {
         </div>}
 
       {isModalOpen && currentPost ?
-        <GenericModal modalTitle={currentPost.title} modalBody={
-          <>{currentPost.body }</>}
+        <GenericModal modalTitle={currentPost.title}
+          modalBody={
+            <>
+              <p>{currentPost.body}</p>
+              <h5>Post Id: #{currentPost.id}</h5>
+            </>
+          }
           isModalOpen={isModalOpen}
           closeModal={() => {
             setIsModalOpen(false);

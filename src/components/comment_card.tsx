@@ -1,10 +1,6 @@
 import * as React from 'react';
 import { Button, Card, CardText, CardTitle } from 'reactstrap';
-import { getComments } from '../data/data.service';
 import { Comment } from '../models/comment.model';
-import { Post } from '../models/post.model';
-import { GenericModal } from './modal';
-
 
 interface Props {
     readonly comment: Comment;

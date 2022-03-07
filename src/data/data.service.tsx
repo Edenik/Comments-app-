@@ -11,8 +11,3 @@ export const getPost = async (postId: number) => {
     const resp = await getRequest<Post>(`posts/${postId}`);
     return resp
 }
-
-// export const createNewAisle = async (layoutId: any) => {
-//     const resp = await postRequest<any>(`planogram/new/createNewAisle`, { layoutId });
-//     return resp
-// }

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Modal, ModalBody, ModalFooter, ModalHeader, } from "reactstrap"
+import { Modal, ModalBody, ModalHeader } from "reactstrap";
 
 interface Props {
     readonly isModalOpen: boolean;
@@ -7,7 +7,6 @@ interface Props {
     readonly modalTitle : string;
     readonly modalBody : JSX.Element;
     readonly modalFooter ? : JSX.Element;
-
 }
 
 export const GenericModal: React.FC<Props> = (props) => {
@@ -23,6 +22,5 @@ export const GenericModal: React.FC<Props> = (props) => {
             {modalFooter }
         </Modal>
     )
-
 }
 
