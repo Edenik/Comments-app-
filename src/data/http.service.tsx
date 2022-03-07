@@ -3,7 +3,6 @@ import axios, {
 } from "axios";
 
 export const httpClient: AxiosInstance = axios.create({
-    baseURL: 'https://jsonplaceholder.typicode.com/',
     timeout: 300000,
     headers: {}
 });

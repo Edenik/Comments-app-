@@ -3,7 +3,7 @@ import { Button, Spinner } from 'reactstrap';
 import { CommentCard } from './components/comment_card';
 import { GenericModal } from './components/modal';
 import { PostForm } from './components/post_form';
-import { getComments, getPost } from './data/data.service';
+import { getComments, getPost, postComment } from './data/data.service';
 import './index.css';
 import { Comment, NewComment } from './models/comment.model';
 import { Post } from './models/post.model';
@@ -59,7 +59,6 @@ const App = () => {
     try {
       if (postsCache[comment.postId] != null) {
         setCurrentPost(postsCache[comment.postId]);
-
       } else {
         const data = await getPost(comment.postId);
         if (data) {
@@ -76,12 +75,11 @@ const App = () => {
 
   const handlePostComment = async (newComment: NewComment) => {
     try {
-      console.log({ newComment })
+      await postComment(newComment);
       setIsModalOpen(false);
     } catch (error) {
       console.log({ error })
     }
-
   }
 
   return (
@@ -91,7 +89,7 @@ const App = () => {
           <Spinner></Spinner>
         </div>
       </div> :
-        <div className='container'  >
+        <div className='container'>
           <div className='d-flex'>
             <h1 className='mb-5 mt-5'>Comments: ({comments?.length}) </h1>
           </div>
@@ -116,7 +114,7 @@ const App = () => {
         </div>}
 
       {isModalOpen && currentPost ?
-        <GenericModal modalTitle={currentPost.title}
+        (<GenericModal modalTitle={currentPost.title}
           modalBody={
             <>
               <p>{currentPost.body}</p>
@@ -127,13 +125,16 @@ const App = () => {
           closeModal={() => {
             setIsModalOpen(false);
             setCurrentPost(null);
-          }} /> : isModalOpen && currentPost == null ? <GenericModal modalTitle={'Add Comment'}
+          }} />)
+        : isModalOpen && currentPost == null ?
+          (<GenericModal modalTitle={'Add Comment'}
             modalBody={<PostForm handleFormSubmit={handlePostComment}></PostForm>}
             isModalOpen={isModalOpen}
             closeModal={() => {
               setIsModalOpen(false);
               setCurrentPost(null);
-            }} /> : null}
+            }} />) 
+            : null}
     </>
   );
 }
